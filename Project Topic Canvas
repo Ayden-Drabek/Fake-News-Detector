@@ -1,0 +1,22 @@
+Chosen Topic
+As topic for the Machine Learning project, we chose fake news detection. 
+Fake news encapsulates pieces of news that may contain false and/or exaggerated claims, generally spread through social media and other online media. 
+This is often done to further or impose certain ideas, often achieved with political agendas. 
+It has quickly become a society problem, being used to propagate information in order to change people’s behaviour. 
+Our objective is to build a model that accurately classifies a piece of news as REAL or FAKE. 
+The dataset that we will test our model on, mainly comprises large articles, ranging from 200 words to 2000 words. 
+The dataset includes roughly 9000 articles. After manually inspecting the dataset, we could conclude that there is no class-imbalance, as the amount of fake and real articles are almost perfectly half of the available articles. 
+We would propose to use a model based on binary classification, as we have two classes; real and fake. 
+
+We found there to be relatively many related works regarding the topic of fake news detection, however not many models were implemented on large articles. These articles still seem to be very still helpful to our project in terms of data and experimental setup. 
+
+Most difficult aspects of this topic
+One of the difficult aspects of our research would be the running time, as the dataset consists of large articles, and training/testing a model on it could take a while. 
+The size difference between the articles may cause some difficulties. 
+Moreover, some articles contain random symbols whereas others don’t, which may present itself as a problem once we analyze the articles. 
+
+Open questions/problems
+We hope to receive some help with the research question, as we 
+Also, regarding the choice of specific model, the classification models we have considered so far are OLS, Logistic Regression and Support Vector Machine. 
+Nevertheless, main literature suggests to use the PassiveAggressiveClassifier. We are still in doubt what models are best for fake news detection. 
+
