@@ -1,9 +1,9 @@
 # Fake-News-Detector
 
 ## Websites
--https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit
--https://mccormickml.com/2016/04/12/googles-pretrained-word2vec-model-in-python/
--https://towardsdatascience.com/full-pipeline-project-python-ai-for-detecting-fake-news-with-nlp-bbb1eec4936d
+- https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit
+- https://mccormickml.com/2016/04/12/googles-pretrained-word2vec-model-in-python/
+- https://towardsdatascience.com/full-pipeline-project-python-ai-for-detecting-fake-news-with-nlp-bbb1eec4936d
 
 - https://data-flair.training/blogs/advanced-python-project-detecting-fake-news/
 - https://github.com/several27/FakeNewsCorpus
