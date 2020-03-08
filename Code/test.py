@@ -5,6 +5,9 @@ import nltk
 import sys
 from gensim.models import Word2Vec
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 
 def read_dataset(file,sheet,column1):
@@ -50,12 +53,19 @@ def read_article(URL):
 file = sys.argv[1]
 sheet = sys.argv[2]
 column = sys.argv[3]
+dictlist = []
 print(file,sheet,column)
 URL = read_dataset(file,sheet,column)
 for i in range(5):
-	print("\n\n"+str(i)+":      ")
+	#print("\n\n"+str(i)+":      ")
 	all_words = read_article(URL[i])
 
-	word2vec = Word2Vec(all_words, min_count=10)
-	vocabulary = word2vec.wv.vocab
-	print(vocabulary)
+	word2vec = Word2Vec(all_words, min_count=3)
+	vocabulary = list(word2vec.wv.vocab)
+	dictlist.append(vocabulary)
+	#print(vocabulary)
+
+'''for x in range(len(dictlist)):
+	print("\n\n")
+	print(dictlist[x])
+	'''
