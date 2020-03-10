@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-bankdata = pd.read_csv("data.csv")
+bankdata = pd.read_csv("data2.csv", error_bad_lines=False)
 body = bankdata['Body']
 label = bankdata['Label']
 dictlist = []
