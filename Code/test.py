@@ -114,7 +114,7 @@ URL, body, label = read_dataset(file,sheet,column)
 
 avg = np.arange(300, dtype=np.float16)
 data = []
-
+newlabel = []
 
 for i in range(245):
 	data = []
