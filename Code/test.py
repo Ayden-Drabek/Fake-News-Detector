@@ -117,7 +117,8 @@ data = []
 newlabel = []
 
 for i in range(245):
-	data = []
+	newlabel.append(label[i])
+	#data = []
 	#print(str(i))
 	all_words = clean_article(body[i])
 	df = word_to_vec(all_words)
