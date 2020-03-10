@@ -13,12 +13,16 @@ from sklearn.manifold import TSNE
 
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
+<<<<<<< HEAD
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.linear_model import PassiveAggressiveClassifier
 
 import time
 
 start_time = time.time()
+=======
+from sklearn.metrics import accuracy_score, confusion_matrix
+>>>>>>> 239b8f804d0dfe76d2f4c92d207593be8e34d63a
 
 
 
@@ -69,6 +73,7 @@ def word_to_vec(all_words):
 	avg = np.mean([model[word] for word in all_words if word in model.vocab])
 	# Create a list of the words corresponding to these vectors
 	words_filtered = [word for word in all_words if word in model.vocab]
+<<<<<<< HEAD
 
 	# Zip the words together with their vector representations
 	word_vec_zip = zip(words_filtered, vector_list)
@@ -105,6 +110,44 @@ def tsne(df):
 
 
 model = KeyedVectors.load_word2vec_format('/home/malu/GoogleNews-vectors-negative300.bin', binary=True)  
+=======
+
+	# Zip the words together with their vector representations
+	word_vec_zip = zip(words_filtered, vector_list)
+
+	# Cast to a dict so we can turn it into a DataFrame
+	word_vec_dict = dict(word_vec_zip)
+
+	df = pd.DataFrame.from_dict(word_vec_dict, orient='index')
+	return df
+
+def tsne(df):
+	# Initialize t-SNE
+	tsne = TSNE(n_components = 2, init = 'random', random_state = 10, perplexity = 100)
+
+	# Use only 400 rows to shorten processing time
+	tsne_df = tsne.fit_transform(df[:400])
+	sns.set()# Initialize figure
+	fig, ax = plt.subplots(figsize = (11.7, 8.27))
+	sns.scatterplot(tsne_df[:, 0], tsne_df[:, 1], alpha = 0.5)
+
+	# Import adjustText, initialize list of texts
+	texts = []
+	words_to_plot = list(np.arange(0, len(tsne_df), 10))
+
+	# Append words to list
+	for word in words_to_plot:
+		texts.append(plt.text(tsne_df[word, 0], tsne_df[word, 1], df.index[word], fontsize = 14))
+	# Plot text using adjust_text (because overlapping text is hard to read)
+	adjust_text(texts, force_points = 0.4, force_text = 0.4, 
+	            expand_points = (2,1), expand_text = (1,2),
+	            arrowprops = dict(arrowstyle = "-", color = 'black', lw = 0.5))
+
+	plt.draw()
+
+
+model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)  
+>>>>>>> 239b8f804d0dfe76d2f4c92d207593be8e34d63a
 vocab = model.vocab.keys()
 file = sys.argv[1]
 sheet = sys.argv[2]
@@ -113,11 +156,17 @@ URL, body, label = read_dataset(file,sheet,column)
 
 avg = np.arange(300, dtype=np.float16)
 data = []
+<<<<<<< HEAD
 newlabel = []
 
 for i in range(245):
 	newlabel.append(label[i])
 	#data = []
+=======
+
+for i in range(245):
+	data = []
+>>>>>>> 239b8f804d0dfe76d2f4c92d207593be8e34d63a
 	#print(str(i))
 	all_words = clean_article(body[i])
 	df = word_to_vec(all_words)
@@ -128,6 +177,7 @@ for i in range(245):
 	data.append(avg)
 	#tsne(df)
 
+<<<<<<< HEAD
 #print(data)
 print("vector label lenght  " + str(len(newlabel)))
 
@@ -168,3 +218,6 @@ print(f'Accuracy: {round(score*100,2)}%')
 
 print("--- %s seconds ---" % (time.time() - start_time))
 #plt.show()
+=======
+plt.show()
+>>>>>>> 239b8f804d0dfe76d2f4c92d207593be8e34d63a
