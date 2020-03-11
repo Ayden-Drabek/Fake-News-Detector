@@ -21,7 +21,7 @@ import time
 start_time = time.time()
 
 def read_dataset(file,sheet,column1):
-	df = pd.read_excel(str(file), sheet_name=str(sheet))
+	df = pd.read_excel(str(file), sheet_name=str(sheet), error_bad_lines=False)
 	URL = df[column1]
 	Body = df['Body']
 	label = df['Label']
@@ -103,7 +103,7 @@ def tsne(df):
 	plt.draw()
 
 
-model = KeyedVectors.load_word2vec_format('/home/malu/GoogleNews-vectors-negative300.bin', binary=True)  
+model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)  
 
 
 vocab = model.vocab.keys()
@@ -113,43 +113,45 @@ column = sys.argv[3]
 URL, body, label = read_dataset(file,sheet,column)
 
 avg = np.arange(300, dtype=np.float16)
-data = []
+sums = []
+avgs = []
 newlabel = []
 
-for i in range(245):
+for i in range(len(body)):
 	newlabel.append(label[i])
 	#data = []
 	#print(str(i))
 	all_words = clean_article(body[i])
 	df = word_to_vec(all_words)
-	for k in range(300):
-		avg[k] = np.mean(df[k])
+	sums.append(np.sum(df))
+	avgs.append(np.mean(df))
 
 	#the average vector for each article 
-	data.append(avg)
-	#tsne(df)
+
 
 
 #print(data)
-print("vector label lenght  " + str(len(newlabel)))
+# print("vector label lenght  " + str(len(newlabel)))
 
-print("data lenght  " + str(len(data)))
-print("data column lenght  " + str(len(data[0])))
+# print("data lenght  " + str(len(data)))
+# print("data column lenght  " + str(len(data[0])))
 
-X_train, X_test, y_train, y_test = train_test_split(data, newlabel, test_size = 0.20)
-print(str(y_train) +"\n\n" + str(y_test) + "\n\n") 
+X_train, X_test, y_train, y_test = train_test_split(sums, newlabel, test_size = 0.25)
+#print(str(y_train) +"\n\n" + str(y_test) + "\n\n") 
 
 svclassifier = SVC(kernel='sigmoid')
 svclassifier.fit(X_train, y_train)
 
 y_pred = svclassifier.predict(X_test)
 
-print("------- SVM -------")
+print("------- SVM Sum-------")
 print(y_pred)
 
 
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
+score=accuracy_score(y_test,y_pred)
+print(f'Accuracy: {round(score*100,2)}%')
 
 
 #DataFlair - Initialize a PassiveAggressiveClassifier
@@ -160,7 +162,7 @@ y_predPA=pac.predict(X_test)
 
 score=accuracy_score(y_test,y_predPA)
 
-print("------- PASSIVE AGRESSIVE CLASSIFIER -------")
+print("------- PASSIVE AGRESSIVE CLASSIFIER Sum-------")
 print(y_predPA)
 print(confusion_matrix(y_test, y_predPA))
 print(classification_report(y_test, y_predPA))
@@ -169,5 +171,46 @@ print(f'Accuracy: {round(score*100,2)}%')
 
 
 print("--- %s seconds ---" % (time.time() - start_time))
-#plt.show()
+
+
+
+
+
+X_train, X_test, y_train, y_test = train_test_split(avgs, newlabel, test_size = 0.25)
+#print(str(y_train) +"\n\n" + str(y_test) + "\n\n") 
+
+svclassifier = SVC(kernel='sigmoid')
+svclassifier.fit(X_train, y_train)
+
+y_pred = svclassifier.predict(X_test)
+
+print("------- SVM avg-------")
+print(y_pred)
+
+
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+score=accuracy_score(y_test,y_pred)
+print(f'Accuracy: {round(score*100,2)}%')
+
+
+#DataFlair - Initialize a PassiveAggressiveClassifier
+pac=PassiveAggressiveClassifier(max_iter=50)
+pac.fit(X_train,y_train)
+#DataFlair - Predict on the test set and calculate accuracy
+y_predPA=pac.predict(X_test)
+
+score=accuracy_score(y_test,y_predPA)
+
+print("------- PASSIVE AGRESSIVE CLASSIFIER avg-------")
+print(y_predPA)
+print("\n\n")
+print(newlabel)
+print(confusion_matrix(y_test, y_predPA))
+print(classification_report(y_test, y_predPA))
+
+print(f'Accuracy: {round(score*100,2)}%')
+
+
+print("--- %s seconds ---" % (time.time() - start_time))
 
