@@ -103,8 +103,47 @@ def tsne(df):
 	plt.draw()
 
 
-model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)  
 
+def SVM(kern,X_train, X_test, y_train, y_test):
+
+	svclassifier = SVC(kernel=kern)
+	svclassifier.fit(X_train, y_train)
+
+	y_pred = svclassifier.predict(X_test)
+
+	print("\n\n------- SVM " + kern + "------")
+	#print(y_pred)
+	#print(confusion_matrix(y_test, y_pred))
+	print(classification_report(y_test, y_pred))
+	score=accuracy_score(y_test,y_pred)
+	print(f'Accuracy: {round(score*100,2)}%')
+
+
+def Passive(X_train, X_test, y_train, y_test,iter):
+	#DataFlair - Initialize a PassiveAggressiveClassifier
+	pac=PassiveAggressiveClassifier(max_iter=iter)
+	pac.fit(X_train,y_train)
+	#DataFlair - Predict on the test set and calculate accuracy
+	y_predPA=pac.predict(X_test)
+
+	score=accuracy_score(y_test,y_predPA)
+
+	print("\n\n------- PASSIVE AGRESSIVE CLASSIFIER " + str(iter) + "-------")
+	#print(y_predPA)
+	#print(confusion_matrix(y_test, y_predPA))
+	print(classification_report(y_test, y_predPA))
+
+	print(f'Accuracy: {round(score*100,2)}%')
+
+
+	print("--- %s seconds ---" % (time.time() - start_time))
+
+
+
+
+
+
+model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)  
 
 vocab = model.vocab.keys()
 file = sys.argv[1]
@@ -128,89 +167,24 @@ for i in range(len(body)):
 
 	#the average vector for each article 
 
+print("\n\n--------SUM--------")
+X_train, X_test, y_train, y_test = train_test_split(sums, newlabel, test_size = 0.20)
+
+SVM('sigmoid',X_train, X_test, y_train, y_test)
+SVM('linear',X_train, X_test, y_train, y_test)
+SVM('rbf',X_train, X_test, y_train, y_test)
+
+Passive(X_train, X_test, y_train, y_test,25)
+Passive(X_train, X_test, y_train, y_test,50)
+Passive(X_train, X_test, y_train, y_test,100)
 
 
-#print(data)
-# print("vector label lenght  " + str(len(newlabel)))
+print("\n\n--------AVERAGE--------")
 
-# print("data lenght  " + str(len(data)))
-# print("data column lenght  " + str(len(data[0])))
+SVM('sigmoid',X_train, X_test, y_train, y_test)
+SVM('linear',X_train, X_test, y_train, y_test)
+SVM('rbf',X_train, X_test, y_train, y_test)
 
-X_train, X_test, y_train, y_test = train_test_split(sums, newlabel, test_size = 0.25)
-#print(str(y_train) +"\n\n" + str(y_test) + "\n\n") 
-
-svclassifier = SVC(kernel='sigmoid')
-svclassifier.fit(X_train, y_train)
-
-y_pred = svclassifier.predict(X_test)
-
-print("------- SVM Sum-------")
-print(y_pred)
-
-
-print(confusion_matrix(y_test, y_pred))
-print(classification_report(y_test, y_pred))
-score=accuracy_score(y_test,y_pred)
-print(f'Accuracy: {round(score*100,2)}%')
-
-
-#DataFlair - Initialize a PassiveAggressiveClassifier
-pac=PassiveAggressiveClassifier(max_iter=50)
-pac.fit(X_train,y_train)
-#DataFlair - Predict on the test set and calculate accuracy
-y_predPA=pac.predict(X_test)
-
-score=accuracy_score(y_test,y_predPA)
-
-print("------- PASSIVE AGRESSIVE CLASSIFIER Sum-------")
-print(y_predPA)
-print(confusion_matrix(y_test, y_predPA))
-print(classification_report(y_test, y_predPA))
-
-print(f'Accuracy: {round(score*100,2)}%')
-
-
-print("--- %s seconds ---" % (time.time() - start_time))
-
-
-
-
-
-X_train, X_test, y_train, y_test = train_test_split(avgs, newlabel, test_size = 0.25)
-#print(str(y_train) +"\n\n" + str(y_test) + "\n\n") 
-
-svclassifier = SVC(kernel='sigmoid')
-svclassifier.fit(X_train, y_train)
-
-y_pred = svclassifier.predict(X_test)
-
-print("------- SVM avg-------")
-print(y_pred)
-
-
-print(confusion_matrix(y_test, y_pred))
-print(classification_report(y_test, y_pred))
-score=accuracy_score(y_test,y_pred)
-print(f'Accuracy: {round(score*100,2)}%')
-
-
-#DataFlair - Initialize a PassiveAggressiveClassifier
-pac=PassiveAggressiveClassifier(max_iter=50)
-pac.fit(X_train,y_train)
-#DataFlair - Predict on the test set and calculate accuracy
-y_predPA=pac.predict(X_test)
-
-score=accuracy_score(y_test,y_predPA)
-
-print("------- PASSIVE AGRESSIVE CLASSIFIER avg-------")
-print(y_predPA)
-print("\n\n")
-print(newlabel)
-print(confusion_matrix(y_test, y_predPA))
-print(classification_report(y_test, y_predPA))
-
-print(f'Accuracy: {round(score*100,2)}%')
-
-
-print("--- %s seconds ---" % (time.time() - start_time))
-
+Passive(X_train, X_test, y_train, y_test,25)
+Passive(X_train, X_test, y_train, y_test,50)
+Passive(X_train, X_test, y_train, y_test,100)
